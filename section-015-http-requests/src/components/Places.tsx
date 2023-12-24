@@ -8,7 +8,7 @@ interface PlacesInterface {
   onSelectPlace: (selectedPlace: PlacesDataInterface) => void
 }
 
-export const  Places = ({ title, places, fallbackText, onSelectPlace }: PlacesInterface) => {
+export const Places = ({title, places, fallbackText, onSelectPlace}: PlacesInterface) => {
   return (
     <section className="places-category">
 
@@ -18,14 +18,17 @@ export const  Places = ({ title, places, fallbackText, onSelectPlace }: PlacesIn
 
       {places.length > 0 && (
         <ul className="places">
-          {places.map((place) => (
-            <li key={place.id} className="place-item">
-              <button onClick={() => onSelectPlace(place)}>
-                <img src={`http://localhost:3000/${place.image.src}`} alt={place.image.alt} />
-                <h3>{place.title}</h3>
-              </button>
-            </li>
-          ))}
+          {places.map((place) => {
+            return (
+              <li key={place.id} className="place-item">
+                <button onClick={() => onSelectPlace(place)}>
+                  <img src={`http://localhost:3000/${place.image.src}`} alt={place.image.alt}/>
+                  <h3>{place.title}</h3>
+                </button>
+              </li>
+            )
+          })
+          }
         </ul>
       )}
 

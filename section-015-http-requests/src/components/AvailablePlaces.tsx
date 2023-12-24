@@ -8,23 +8,23 @@ interface AvailablePlacesInterface {
 
 export const AvailablePlaces = ({onSelectPlace}: AvailablePlacesInterface) => {
 
-  const [availablePlases, setAvailablePlaces] = useState<PlacesDataInterface[]>([])
+  const [availablePlaces, setAvailablePlaces] = useState<PlacesDataInterface[]>([])
 
-  useEffect(() => {
-  fetch('http://localhost:3000/places')
-    .then((response) => {
-      return response.json()
-    })
-    .then((responseJSON) => {
-      setAvailablePlaces(responseJSON.places)
-    })
+  useEffect( () => {
+    const fetchPlaces = async () => {
+      const response = await fetch('http://localhost:3000/places')
+      const resData = await response.json()
+      setAvailablePlaces(resData.places)
+    }
+
+    fetchPlaces()
   },[])
 
 
   return (
     <Places
       title="Available Places"
-      places={availablePlases}
+      places={availablePlaces}
       fallbackText="No places available."
       onSelectPlace={onSelectPlace}
     />
