@@ -6,8 +6,8 @@ interface PlacesInterface {
   places: PlacesDataInterface[]
   fallbackText?: string | undefined
   onSelectPlace: (selectedPlace: PlacesDataInterface) => void
-  isLoading: boolean
-  loadingText: string
+  isLoading?: boolean
+  loadingText?: string
 }
 
 export const Places = ({title, places, fallbackText, onSelectPlace, isLoading, loadingText}: PlacesInterface) => {
@@ -15,7 +15,7 @@ export const Places = ({title, places, fallbackText, onSelectPlace, isLoading, l
     <section className="places-category">
 
       <h2>{title}</h2>
-      {isLoading && <p className="fallback-text">{loadingText}</p>}
+      {isLoading && <p className="fallback-text">{loadingText ?? 'Fetching the places'}</p>}
 
       {!isLoading && places.length === 0 && <p className='fallback-text'>{fallbackText}</p>}
 

@@ -28,6 +28,8 @@ export const App = () => {
       }
       return [selectedPlace, ...prevPickedPlaces];
     });
+
+    // Also send the updated array back to the backend
   }
 
   const handleRemovePlace = useCallback(async () => {

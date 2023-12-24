@@ -12,7 +12,6 @@ const INTERVAL_STEPS = 10
 
 export const DeleteConfirmation = ({onConfirm, onCancel}: DeleteConfirmationInterface) => {
 
-  console.log('ReRedner DeleteConfirmation')
   useEffect(() => {
     const t = setTimeout(() => {
         onConfirm()

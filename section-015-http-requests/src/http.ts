@@ -1,6 +1,7 @@
+import {PlacesDataInterface} from "./types/types";
 
 
-export const fetchAvailablePlaces = async () => {
+export const fetchAvailablePlaces = async (): Promise<PlacesDataInterface[]> => {
   const response = await fetch('http://localhost:3000/places')
 
   if (!response.ok) {
@@ -10,5 +11,24 @@ export const fetchAvailablePlaces = async () => {
   const resData = await response.json()
 
   return resData.places
+}
 
+export const updateUSerPlaces = async (places: PlacesDataInterface[]) :Promise<string> => {
+  const response = await fetch(
+    'http://localhost:3000/user-places',
+    {
+      method: 'PUT',
+      body: JSON.stringify(places),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    },
+  )
+
+  const resData = await response.json()
+  if (!response.ok) {
+    throw new Error('Failed to update user data.') as Error
+  }
+
+  return resData.message
 }
