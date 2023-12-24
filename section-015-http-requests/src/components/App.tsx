@@ -62,8 +62,6 @@ export const App = () => {
           onSelectPlace={handleStartRemovePlace}
         />
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
-
-
       </main>
     </Fragment>
   );
