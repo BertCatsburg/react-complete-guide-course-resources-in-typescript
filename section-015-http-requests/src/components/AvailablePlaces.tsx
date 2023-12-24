@@ -1,6 +1,8 @@
 import {Places, ErrorComponent} from './index'
 import React, {useEffect, useState} from 'react'
 import {PlacesDataInterface} from "../types/types";
+import {sortPlacesByDistance} from '../loc.js'
+import { fetchAvailablePlaces} from "../http";
 
 interface AvailablePlacesInterface {
   onSelectPlace: (selectedPlace: PlacesDataInterface) => void
@@ -16,23 +18,24 @@ export const AvailablePlaces = ({onSelectPlace}: AvailablePlacesInterface) => {
       setIsFetching(true)
 
       try {
-        const response = await fetch('http://localhost:3000/places')
+        const places = await fetchAvailablePlaces()
 
-        if (!response.ok) {
-          // noinspection ExceptionCaughtLocallyJS
-          throw new Error() as Error
-        }
-        const resData = await response.json()
-        setAvailablePlaces(resData.places)
-
+        navigator.geolocation.getCurrentPosition((position) => {
+          const sortedPlaces = sortPlacesByDistance(
+            places,
+            position.coords.latitude,
+            position.coords.longitude
+            )
+          setAvailablePlaces(sortedPlaces)
+          setIsFetching(false)
+        })
       } catch (error: unknown) {
         if (error instanceof Error) {
           setErrorMessage({message: error.message || 'Could not fetch Places, please try again later'})
         }
+        setIsFetching(false)
       }
-      setIsFetching(false)
     }
-
     fetchPlaces()
   },[])
 
