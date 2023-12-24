@@ -9,7 +9,7 @@ export const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false) // Used in Modal with useEffect
   const selectedPlace = useRef<string>();
   const [userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
-  const [errorMessage, setErrorMessage] = useState<{message: string} | undefined>(undefined)
+  const [errorUpdatingPlaces, setErrorUpdatingplaces] = useState<{message: string} | undefined>()
 
   const handleStartRemovePlace = (place: PlacesDataInterface) => {
     setModalIsOpen(true)
@@ -31,11 +31,15 @@ export const App = () => {
       return [selectedPlace, ...prevPickedPlaces];
     });
 
+    // Above the local statechange before the update to the server.
+    // This is called "Optimistic Updating".
+
     try {
       await updateUserPlaces([selectedPlace, ...userPlaces])
     } catch (error: unknown) {
+      setUserPlaces(userPlaces) // We have been too optimistic: Set it back to old version
       if (error instanceof Error) {
-        setErrorMessage({message: error.message || 'Could not store User Places, please try again later'})
+        setErrorUpdatingplaces({message: error.message || 'Failed to update places.'})
       }
     }
   }
@@ -47,15 +51,12 @@ export const App = () => {
     setModalIsOpen(false)
   }, [])
 
-
-  if (errorMessage) {
-    return (
-      <ErrorComponent title="Error on Storing Data" message={errorMessage.message}  />
-    )
-  }
-
   return (
     <Fragment>
+      <Modal open={!!errorUpdatingPlaces} onClose={handleStopRemovePlace}>  {/* ref={modal} */}
+        <ErrorComponent title="An error occurred!" message={errorUpdatingPlaces?.message || 'Cannot update Places'} />
+      </Modal>
+
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>  {/* ref={modal} */}
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
