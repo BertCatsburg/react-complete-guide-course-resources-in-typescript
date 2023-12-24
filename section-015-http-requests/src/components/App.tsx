@@ -1,13 +1,15 @@
 import React, {useRef, useState, Fragment, useCallback} from 'react';
 
-import {Places, Modal, DeleteConfirmation, AvailablePlaces} from './index';
+import {Places, Modal, DeleteConfirmation, AvailablePlaces, ErrorComponent} from './index';
 import logoImg from '../assets/logo.png';
 import {PlacesDataInterface} from "../types/types";
+import {updateUserPlaces} from "../http";
 
 export const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false) // Used in Modal with useEffect
   const selectedPlace = useRef<string>();
   const [userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
+  const [errorMessage, setErrorMessage] = useState<{message: string} | undefined>(undefined)
 
   const handleStartRemovePlace = (place: PlacesDataInterface) => {
     setModalIsOpen(true)
@@ -18,7 +20,7 @@ export const App = () => {
     setModalIsOpen(false)
   }
 
-  function handleSelectPlace(selectedPlace: PlacesDataInterface) {
+  const  handleSelectPlace = async (selectedPlace: PlacesDataInterface) => {
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
@@ -29,7 +31,13 @@ export const App = () => {
       return [selectedPlace, ...prevPickedPlaces];
     });
 
-    // Also send the updated array back to the backend
+    try {
+      await updateUserPlaces([selectedPlace, ...userPlaces])
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErrorMessage({message: error.message || 'Could not store User Places, please try again later'})
+      }
+    }
   }
 
   const handleRemovePlace = useCallback(async () => {
@@ -38,6 +46,13 @@ export const App = () => {
     );
     setModalIsOpen(false)
   }, [])
+
+
+  if (errorMessage) {
+    return (
+      <ErrorComponent title="Error on Storing Data" message={errorMessage.message}  />
+    )
+  }
 
   return (
     <Fragment>

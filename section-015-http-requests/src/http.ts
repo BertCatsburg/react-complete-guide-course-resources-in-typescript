@@ -13,12 +13,13 @@ export const fetchAvailablePlaces = async (): Promise<PlacesDataInterface[]> => 
   return resData.places
 }
 
-export const updateUSerPlaces = async (places: PlacesDataInterface[]) :Promise<string> => {
+export const updateUserPlaces = async (places: PlacesDataInterface[]): Promise<string> => {
+  console.log(places)
   const response = await fetch(
     'http://localhost:3000/user-places',
     {
       method: 'PUT',
-      body: JSON.stringify(places),
+      body: JSON.stringify({places}),
       headers: {
         'Content-Type': 'application/json'
       }
