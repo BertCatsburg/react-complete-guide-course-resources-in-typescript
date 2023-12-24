@@ -9,26 +9,25 @@ interface AvailablePlacesInterface {
 export const AvailablePlaces = ({onSelectPlace}: AvailablePlacesInterface) => {
   const [isFetching, setIsFetching] = useState(false)
   const [availablePlaces, setAvailablePlaces] = useState<PlacesDataInterface[]>([])
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<{message: string} | undefined>(undefined)
 
   useEffect( () => {
     const fetchPlaces = async () => {
       setIsFetching(true)
 
-      // noinspection ExceptionCaughtLocallyJS
       try {
-        const response = await fetch('http://localhost:3000/placesss')
+        const response = await fetch('http://localhost:3000/places')
 
         if (!response.ok) {
           // noinspection ExceptionCaughtLocallyJS
-          throw new Error('Failed to fetched places') as Error
+          throw new Error() as Error
         }
         const resData = await response.json()
         setAvailablePlaces(resData.places)
 
       } catch (error: unknown) {
         if (error instanceof Error) {
-          setErrorMessage(error.message)
+          setErrorMessage({message: error.message || 'Could not fetch Places, please try again later'})
         }
       }
       setIsFetching(false)
@@ -39,10 +38,9 @@ export const AvailablePlaces = ({onSelectPlace}: AvailablePlacesInterface) => {
 
   if (errorMessage) {
     return (
-      <ErrorComponent title="Error on Fetching Data" message={errorMessage}  />
+      <ErrorComponent title="Error on Fetching Data" message={errorMessage.message}  />
     )
   }
-
 
   return (
     <Places
