@@ -9,7 +9,9 @@ export const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false) // Used in Modal with useEffect
   const selectedPlace = useRef<string>();
   const [userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
-  const [errorUpdatingPlaces, setErrorUpdatingplaces] = useState<{message: string} | undefined>()
+  const [errorUpdatingPlaces, setErrorUpdatingplaces] = useState<{
+    message: string
+  } | undefined>()
 
   const handleStartRemovePlace = (place: PlacesDataInterface) => {
     setModalIsOpen(true)
@@ -20,7 +22,7 @@ export const App = () => {
     setModalIsOpen(false)
   }
 
-  const  handleSelectPlace = async (selectedPlace: PlacesDataInterface) => {
+  const handleSelectPlace = async (selectedPlace: PlacesDataInterface) => {
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
@@ -51,10 +53,20 @@ export const App = () => {
     setModalIsOpen(false)
   }, [])
 
+  const handleError = () => {
+    setErrorUpdatingplaces(undefined)
+  }
+
   return (
     <Fragment>
       <Modal open={!!errorUpdatingPlaces} onClose={handleStopRemovePlace}>  {/* ref={modal} */}
-        <ErrorComponent title="An error occurred!" message={errorUpdatingPlaces?.message || 'Cannot update Places'} />
+        {errorUpdatingPlaces && (
+          <ErrorComponent
+            title="An error occurred!"
+            message={errorUpdatingPlaces?.message || 'Cannot update Places'}
+            onConfirm={handleError}
+          />
+        )}
       </Modal>
 
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>  {/* ref={modal} */}
@@ -79,7 +91,7 @@ export const App = () => {
           places={userPlaces}
           onSelectPlace={handleStartRemovePlace}
         />
-        <AvailablePlaces onSelectPlace={handleSelectPlace} />
+        <AvailablePlaces onSelectPlace={handleSelectPlace}/>
       </main>
     </Fragment>
   );
