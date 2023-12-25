@@ -1,8 +1,14 @@
-import React from 'react'
+import React, {FormEvent} from 'react'
 
 export const Login = () => {
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    console.log('Submitted')
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h2>Login</h2>
 
       <div className="control-row">
