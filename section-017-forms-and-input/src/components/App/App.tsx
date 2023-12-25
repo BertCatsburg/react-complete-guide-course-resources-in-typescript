@@ -1,12 +1,12 @@
 import React from 'react'
-import {Header, Login} from '../index'
+import {Header, Signup} from '../index'
 
 export const App = () =>  {
   return (
     <>
       <Header />
       <main>
-        <Login />
+        <Signup />
       </main>
     </>
   );
