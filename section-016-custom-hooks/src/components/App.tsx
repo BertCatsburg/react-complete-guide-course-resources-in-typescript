@@ -1,37 +1,28 @@
-import React, {useRef, useState, Fragment, useCallback, useEffect} from 'react';
+import React, {useRef, useState, Fragment, useCallback} from 'react';
 
 import {Places, Modal, DeleteConfirmation, AvailablePlaces, ErrorComponent} from './index';
 import logoImg from '../assets/logo.png';
 import {PlacesDataInterface} from "../types/types";
 import {fetchUserPlaces, updateUserPlaces} from "../http";
+import {useFetch} from "../hooks";
 
 export const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false) // Used in Modal with useEffect
   const selectedPlace = useRef<string>();
-  const [userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
-  const [isFetching, setIsFetching] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<{
-    message: string
-  } | undefined>(undefined)
+  // const [_userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
   const [errorUpdatingPlaces, setErrorUpdatingplaces] = useState<{
     message: string
   } | undefined>()
 
-  useEffect(() => {
-    const fetchPlace = async () => {
-      setIsFetching(true)
-      try {
-        const places = await fetchUserPlaces()
-        setUserPlaces(places)
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setErrorMessage({message: error.message || 'Failed to fetch User Places'})
-        }
-      }
-      setIsFetching(false)
-    }
-    fetchPlace()
-  }, []);
+  const {
+    isFetching,
+    errorMessage,
+    fetchedData: userPlaces,
+    setFetchedData,
+  } = useFetch({
+    fetchFunction: fetchUserPlaces,
+    initialValue: []
+  })
 
   const handleStartRemovePlace = (place: PlacesDataInterface) => {
     setModalIsOpen(true)
@@ -43,7 +34,7 @@ export const App = () => {
   }
 
   const handleSelectPlace = async (selectedPlace: PlacesDataInterface) => {
-    setUserPlaces((prevPickedPlaces) => {
+    setFetchedData((prevPickedPlaces:PlacesDataInterface[]) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
       }
@@ -59,7 +50,7 @@ export const App = () => {
     try {
       await updateUserPlaces([selectedPlace, ...userPlaces])
     } catch (error: unknown) {
-      setUserPlaces(userPlaces) // We have been too optimistic: Set it back to old version
+      setFetchedData(userPlaces) // We have been too optimistic: Set it back to old version
       if (error instanceof Error) {
         setErrorUpdatingplaces({message: error.message || 'Failed to update places.'})
       }
@@ -67,7 +58,7 @@ export const App = () => {
   }
 
   const handleRemovePlace = useCallback(async () => {
-    setUserPlaces((prevPickedPlaces) =>
+    setFetchedData((prevPickedPlaces: PlacesDataInterface[]) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
     try {
@@ -76,12 +67,12 @@ export const App = () => {
       )
     } catch (error) {
       if (error instanceof Error) {
-        setUserPlaces(userPlaces)
+        setFetchedData(userPlaces)
         setErrorUpdatingplaces({message: error.message || `Cannot Delete a Place with id ${selectedPlace.current}`})
       }
     }
     setModalIsOpen(false)
-  }, [userPlaces])
+  }, [userPlaces, setFetchedData])
 
 
   const handleError = () => {

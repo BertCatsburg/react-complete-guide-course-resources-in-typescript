@@ -1,47 +1,44 @@
 import {Places, ErrorComponent} from './index'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {PlacesDataInterface} from "../types/types";
 import {sortPlacesByDistance} from '../loc.js'
-import { fetchAvailablePlaces} from "../http";
+import {fetchAvailablePlaces} from "../http";
+import {useFetch} from "../hooks";
+
 
 interface AvailablePlacesInterface {
   onSelectPlace: (selectedPlace: PlacesDataInterface) => void
 }
 
+const fetchSortedPlaces = async () => {
+  const places = await fetchAvailablePlaces()
+
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance(
+        places,
+        position.coords.latitude,
+        position.coords.longitude
+      )
+
+      resolve(sortedPlaces)
+    })
+  })
+}
+
 export const AvailablePlaces = ({onSelectPlace}: AvailablePlacesInterface) => {
-  const [isFetching, setIsFetching] = useState(false)
-  const [availablePlaces, setAvailablePlaces] = useState<PlacesDataInterface[]>([])
-  const [errorMessage, setErrorMessage] = useState<{message: string} | undefined>(undefined)
 
-  useEffect( () => {
-    const fetchPlaces = async () => {
-      setIsFetching(true)
-
-      try {
-        const places = await fetchAvailablePlaces()
-
-        navigator.geolocation.getCurrentPosition((position) => {
-          const sortedPlaces = sortPlacesByDistance(
-            places,
-            position.coords.latitude,
-            position.coords.longitude
-            )
-          setAvailablePlaces(sortedPlaces)
-          setIsFetching(false)
-        })
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setErrorMessage({message: error.message || 'Could not fetch Places, please try again later'})
-        }
-        setIsFetching(false)
-      }
-    }
-    fetchPlaces()
-  },[])
+  const {
+    isFetching,
+    errorMessage,
+    fetchedData: availablePlaces,
+  } = useFetch({
+    fetchFunction: fetchSortedPlaces, initialValue: []
+  })
 
   if (errorMessage) {
     return (
-      <ErrorComponent title="Error on Fetching Data" message={errorMessage.message}  />
+      <ErrorComponent title="Error on Fetching Data" message={errorMessage.message}/>
     )
   }
 
