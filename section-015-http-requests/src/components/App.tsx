@@ -1,17 +1,37 @@
-import React, {useRef, useState, Fragment, useCallback} from 'react';
+import React, {useRef, useState, Fragment, useCallback, useEffect} from 'react';
 
 import {Places, Modal, DeleteConfirmation, AvailablePlaces, ErrorComponent} from './index';
 import logoImg from '../assets/logo.png';
 import {PlacesDataInterface} from "../types/types";
-import {updateUserPlaces} from "../http";
+import {fetchUserPlaces, updateUserPlaces} from "../http";
 
 export const App = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false) // Used in Modal with useEffect
   const selectedPlace = useRef<string>();
   const [userPlaces, setUserPlaces] = useState<PlacesDataInterface[]>([]);
+  const [isFetching, setIsFetching] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<{
+    message: string
+  } | undefined>(undefined)
   const [errorUpdatingPlaces, setErrorUpdatingplaces] = useState<{
     message: string
   } | undefined>()
+
+  useEffect(() => {
+    const fetchPlace = async () => {
+      setIsFetching(true)
+      try {
+        const places = await fetchUserPlaces()
+        setUserPlaces(places)
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setErrorMessage({message: error.message || 'Failed to fetch User Places'})
+        }
+      }
+      setIsFetching(false)
+    }
+    fetchPlace()
+  }, []);
 
   const handleStartRemovePlace = (place: PlacesDataInterface) => {
     setModalIsOpen(true)
@@ -50,8 +70,19 @@ export const App = () => {
     setUserPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
+    try {
+      await updateUserPlaces(
+        userPlaces.filter((place: PlacesDataInterface) => place.id !== selectedPlace.current)
+      )
+    } catch (error) {
+      if (error instanceof Error) {
+        setUserPlaces(userPlaces)
+        setErrorUpdatingplaces({message: error.message || `Cannot Delete a Place with id ${selectedPlace.current}`})
+      }
+    }
     setModalIsOpen(false)
-  }, [])
+  }, [userPlaces])
+
 
   const handleError = () => {
     setErrorUpdatingplaces(undefined)
@@ -85,12 +116,18 @@ export const App = () => {
         </p>
       </header>
       <main>
-        <Places
-          title="I'd like to visit ..."
-          fallbackText={'Select the places you would like to visit below.'}
-          places={userPlaces}
-          onSelectPlace={handleStartRemovePlace}
-        />
+        {errorMessage && <ErrorComponent title="An Error occurred!" message={errorMessage.message}/>}
+        {
+          !errorMessage &&
+            <Places
+                title="I'd like to visit ..."
+                fallbackText={'Select the places you would like to visit below.'}
+                isLoading={isFetching}
+                loadingText="Fetching your places..."
+                places={userPlaces}
+                onSelectPlace={handleStartRemovePlace}
+            />
+        }
         <AvailablePlaces onSelectPlace={handleSelectPlace}/>
       </main>
     </Fragment>

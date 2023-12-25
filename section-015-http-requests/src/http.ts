@@ -13,6 +13,18 @@ export const fetchAvailablePlaces = async (): Promise<PlacesDataInterface[]> => 
   return resData.places
 }
 
+export const fetchUserPlaces = async (): Promise<PlacesDataInterface[]> => {
+  const response = await fetch('http://localhost:3000/user-places')
+
+  if (!response.ok) {
+    // noinspection ExceptionCaughtLocallyJS
+    throw new Error() as Error
+  }
+  const resData = await response.json()
+
+  return resData.places
+}
+
 export const updateUserPlaces = async (places: PlacesDataInterface[]): Promise<string> => {
   console.log(places)
   const response = await fetch(
