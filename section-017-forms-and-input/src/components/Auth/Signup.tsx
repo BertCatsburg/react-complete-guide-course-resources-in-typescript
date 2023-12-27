@@ -1,8 +1,24 @@
-import React from 'react'
+import React, {FormEvent} from 'react'
 
 export const Signup = () => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    // All fields must have the 'name' prop. Then you can use FormData
+    const fd: FormData = new FormData(event.currentTarget)
+
+    // For each field ...
+    // const enteredEmail = fd.get('email')
+
+    // All fields at once into an Object
+    const acquisitionChannel: FormDataEntryValue[] = fd.getAll('acquisition')
+    const data: {[p: string]: FormDataEntryValue | FormDataEntryValue[]} = Object.fromEntries(fd.entries())
+    data.acquisition = acquisitionChannel
+    console.log(data)
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h2>Welcome on board!</h2>
       <p>We just need a little bit of data from you to get you started 🚀</p>
 

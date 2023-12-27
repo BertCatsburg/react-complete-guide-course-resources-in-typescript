@@ -5,11 +5,20 @@ interface EnteredValuesInterface {
   password: string
 }
 
-export const Login = () => {
+export const StateLogin = () => {
   const [enteredValues, setEnteredValues] = useState<EnteredValuesInterface>({
     email: '',
     password: ''
   })
+
+  const [didEdit, setDidEdit] = useState(
+    {
+      email: false,
+      password: false
+    }
+  )
+
+  const emailIsInvalid = didEdit.email && !enteredValues.email.includes('@')
 
   const handleInputChange = (identifier: string, event: ChangeEvent<HTMLInputElement>): void => {
     setEnteredValues((oldValues: EnteredValuesInterface) => {
@@ -18,16 +27,33 @@ export const Login = () => {
         [identifier]: event.target.value
       }
     })
+    setDidEdit((prevEdit) => {
+      return ({
+        ...prevEdit,
+        [identifier]: false
+      })
+    })
   }
+
+  const handleInputBlur = (identifier: string) => {
+    setDidEdit((prevEdit) => {
+      return ({
+        ...prevEdit,
+        [identifier]: true
+      })
+    })
+  }
+
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     console.log(`Submitted with email ${enteredValues.email} and password ${enteredValues.password}`)
+    setEnteredValues({email: '', password: ''})
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h2>State-Login</h2>
 
       <div className="control-row">
         <div className="control no-margin">
@@ -36,9 +62,13 @@ export const Login = () => {
             id="email"
             type="email"
             name="email"
+            onBlur={() => handleInputBlur('email')}
             onChange={(event: ChangeEvent<HTMLInputElement>) => handleInputChange('email', event)}
             value={enteredValues.email}
           />
+          <div className="control-error">
+            {emailIsInvalid && <p>Please enter a valid email address.</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
@@ -47,6 +77,7 @@ export const Login = () => {
             id="password"
             type="password"
             name="password"
+            onBlur={() => handleInputBlur('password')}
             onChange={(event: ChangeEvent<HTMLInputElement>) => handleInputChange('password', event)}
             value={enteredValues.password}
           />
