@@ -1,7 +1,7 @@
 import React from 'react'
 import {Header, Signup, Login, StateLogin} from '../index'
 
-const formToShow: string = 'login' // 'signup'
+const formToShow: string = 'signup' // 'signup'
 
 export const App = () =>  {
   return (

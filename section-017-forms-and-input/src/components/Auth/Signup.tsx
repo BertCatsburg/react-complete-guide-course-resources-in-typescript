@@ -1,6 +1,9 @@
-import React, {FormEvent} from 'react'
+import React, {FormEvent, useState} from 'react'
 
 export const Signup = () => {
+
+  const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState<boolean>(false)
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -14,6 +17,12 @@ export const Signup = () => {
     const acquisitionChannel: FormDataEntryValue[] = fd.getAll('acquisition')
     const data: {[p: string]: FormDataEntryValue | FormDataEntryValue[]} = Object.fromEntries(fd.entries())
     data.acquisition = acquisitionChannel
+
+    if (data.password !== data['confirm-password']) {
+      setPasswordsAreNotEqual(true)
+      return
+    }
+
     console.log(data)
   }
 
@@ -24,13 +33,13 @@ export const Signup = () => {
 
       <div className="control">
         <label htmlFor="email">Email</label>
-        <input id="email" type="email" name="email" />
+        <input id="email" type="email" name="email" required   />
       </div>
 
       <div className="control-row">
         <div className="control">
           <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" />
+          <input id="password" type="password" name="password" required minLength={4} />
         </div>
 
         <div className="control">
@@ -39,7 +48,11 @@ export const Signup = () => {
             id="confirm-password"
             type="password"
             name="confirm-password"
+            required
           />
+          <div className="control-error">
+            {passwordsAreNotEqual && <p>Passwords must match.</p>}
+          </div>
         </div>
       </div>
 
@@ -53,7 +66,7 @@ export const Signup = () => {
 
         <div className="control">
           <label htmlFor="last-name">Last Name</label>
-          <input type="text" id="last-name" name="last-name" />
+          <input type="text" id="last-name" name="last-name" required />
         </div>
       </div>
 
