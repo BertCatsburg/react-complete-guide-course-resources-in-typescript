@@ -1,5 +1,6 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react'
 import {Input} from '../index'
+import {isEmail, isNotEmpty, hasMinLength} from '../../util/validation'
 
 interface EnteredValuesInterface {
   email: string
@@ -19,8 +20,8 @@ export const StateLogin = () => {
     }
   )
 
-  const emailIsInvalid:boolean = didEdit.email && !enteredValues.email.includes('@')
-  const passwordIsInvalid: boolean = didEdit.password && enteredValues.password.trim().length < 6
+  const emailIsInvalid: boolean = didEdit.email && !isEmail(enteredValues.email) && !isNotEmpty(enteredValues.email)
+  const passwordIsInvalid: boolean = didEdit.password && hasMinLength(enteredValues.password, 6)
 
   const handleInputChange = (identifier: string, event: ChangeEvent<HTMLInputElement>): void => {
     setEnteredValues((oldValues: EnteredValuesInterface) => {

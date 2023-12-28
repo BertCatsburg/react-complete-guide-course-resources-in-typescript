@@ -1,15 +1,15 @@
-export function isEmail(value: string) {
+export const isEmail = (value: string): boolean => {
   return value.includes('@');
 }
 
-export function isNotEmpty(value: string) {
+export const isNotEmpty = (value: string): boolean => {
   return value.trim() !== '';
 }
 
-export function hasMinLength(value: string, minLength: number) {
+export const hasMinLength = (value: string, minLength: number): boolean => {
   return value.length >= minLength;
 }
 
-export function isEqualsToOtherValue(value: any, otherValue: any) {
+export const isEqualsToOtherValue = (value: any, otherValue: any): boolean => {
   return value === otherValue;
 }
