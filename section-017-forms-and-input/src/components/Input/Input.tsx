@@ -6,8 +6,6 @@ interface InputInterface extends ComponentPropsWithoutRef<"input"> {
   error: string | boolean
 }
 export const Input = ({label, id, error, ...props}: InputInterface ) => {
-  console.log(id)
-  console.log(error)
   return (
     <div className="control no-margin">
       <label htmlFor={id}>{label}</label>

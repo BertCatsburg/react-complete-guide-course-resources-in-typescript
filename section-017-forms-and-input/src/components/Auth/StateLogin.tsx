@@ -1,57 +1,39 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react'
+import React, {FormEvent} from 'react'
 import {Input} from '../index'
 import {isEmail, isNotEmpty, hasMinLength} from '../../util/validation'
-
-interface EnteredValuesInterface {
-  email: string
-  password: string
-}
+import {useInput} from "../../hooks";
 
 export const StateLogin = () => {
-  const [enteredValues, setEnteredValues] = useState<EnteredValuesInterface>({
-    email: '',
-    password: ''
-  })
-
-  const [didEdit, setDidEdit] = useState(
-    {
-      email: false,
-      password: false
-    }
+  const {
+    value: emailValue,
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    hasError: emailHasError,
+  } = useInput(
+    '',
+    // Pass multiple validation functions combined in an anonymous function to useInput
+    (value) => isEmail(value) && isNotEmpty(value)
   )
 
-  const emailIsInvalid: boolean = didEdit.email && !isEmail(enteredValues.email) && !isNotEmpty(enteredValues.email)
-  const passwordIsInvalid: boolean = didEdit.password && hasMinLength(enteredValues.password, 6)
-
-  const handleInputChange = (identifier: string, event: ChangeEvent<HTMLInputElement>): void => {
-    setEnteredValues((oldValues: EnteredValuesInterface) => {
-      return {
-        ...oldValues,
-        [identifier]: event.target.value
-      }
-    })
-    setDidEdit((prevEdit) => {
-      return ({
-        ...prevEdit,
-        [identifier]: false
-      })
-    })
-  }
-
-  const handleInputBlur = (identifier: string) => {
-    setDidEdit((prevEdit) => {
-      return ({
-        ...prevEdit,
-        [identifier]: true
-      })
-    })
-  }
-
+  const {
+    value: passwordValue,
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError: passwordHasError,
+  } = useInput(
+    '',
+    (value) => hasMinLength(value, 6)
+  )
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    console.log(`Submitted with email ${enteredValues.email} and password ${enteredValues.password}`)
-    setEnteredValues({email: '', password: ''})
+
+    if (emailHasError || passwordHasError) {
+      return
+    }
+
+    // Send to API backend
+    console.log(`Submitted with email ${emailValue} and password ${passwordValue}`)
   }
 
   return (
@@ -64,10 +46,10 @@ export const StateLogin = () => {
           id="email"
           type="email"
           name="email"
-          onBlur={() => handleInputBlur('email')}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => handleInputChange('email', event)}
-          value={enteredValues.email}
-          error={emailIsInvalid && "Please enter a valid email address"}
+          onBlur={handleEmailBlur}
+          onChange={handleEmailChange}
+          value={emailValue as string}
+          error={emailHasError && "Please enter a valid email address"}
         />
 
         <Input
@@ -75,10 +57,10 @@ export const StateLogin = () => {
           id="password"
           type="password"
           name="password"
-          onBlur={() => handleInputBlur('password')}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => handleInputChange('password', event)}
-          value={enteredValues.password}
-          error={passwordIsInvalid && "Please enter a valid password"}
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          value={passwordValue as string}
+          error={passwordHasError && "Please enter a valid password"}
         />
 
       </div>
