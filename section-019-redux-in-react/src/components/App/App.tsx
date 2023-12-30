@@ -1,8 +1,13 @@
-import {Counter} from '../index';
+import {Counter, Header, Auth} from '../index';
 import React from 'react'
+import {Fragment} from "react";
 
 export const App = () => {
   return (
-    <Counter />
+    <Fragment>
+      <Header/>
+      <Auth />
+      <Counter/>
+    </Fragment>
   );
 }
