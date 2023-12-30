@@ -2,16 +2,45 @@ import {ProductItem} from '../index'
 import classes from './Products.module.css'
 import React from 'react'
 
-export const Products = (props:any) => {
+export interface ProductInterface {
+  id: string
+  price: number
+  title: string
+  description: string
+}
+
+const DUMMY_PRODUCTS: ProductInterface[] = [
+  {
+    id: 'p1',
+    price: 6,
+    title: 'My First Book',
+    description: 'The first book I ever wrote',
+  },
+  {
+    id: 'p2',
+    price: 5,
+    title: 'My Second Book',
+    description: 'The second book I ever wrote',
+  },
+]
+export const Products = () => {
   return (
     <section className={classes.products}>
       <h2>Buy your favorite products</h2>
       <ul>
-        <ProductItem
-          title='Test'
-          price={6}
-          description='This is a first product - amazing!'
-        />
+        {
+          DUMMY_PRODUCTS.map((product) => {
+            return (
+              <ProductItem
+                key={product.id}
+                id={product.id}
+                title={product.title}
+                price={product.price}
+                description={product.description}
+              />
+            )
+          })
+        }
       </ul>
     </section>
   );
