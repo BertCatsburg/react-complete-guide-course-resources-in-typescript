@@ -9,6 +9,9 @@ export const Counter = () => {
 
   const counter = useSelector((state: RootState) => state.counter.counter)
   const show: boolean = useSelector((state: RootState) => state.counter.showCounter)
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
+
+
 
   const incrementHandler = (): void => {
     dispatch(counterActions.increment())
@@ -23,6 +26,10 @@ export const Counter = () => {
   const toggleCounterHandler = (): void => {
     dispatch(counterActions.toggleCounter())
   };
+
+  if (!isAuthenticated) {
+    return null
+  }
 
   return (
     <main className={classes.counter}>

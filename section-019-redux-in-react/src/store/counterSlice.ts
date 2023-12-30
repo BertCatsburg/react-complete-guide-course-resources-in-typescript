@@ -5,12 +5,12 @@ interface CounterStateInterface {
   showCounter: boolean
 }
 
-const initialState: CounterStateInterface = {counter: 0, showCounter: true}
+const initialCounterState: CounterStateInterface = {counter: 0, showCounter: true}
 
 // Create the Slice of the Global Stage
 export const counterSlice = createSlice({
   name: 'counter',
-  initialState: initialState,
+  initialState: initialCounterState,
   reducers: {
     increment: (state) => {
       // Change the old state.
