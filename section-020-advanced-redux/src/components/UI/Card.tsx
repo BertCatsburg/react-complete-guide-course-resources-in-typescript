@@ -1,0 +1,12 @@
+import classes from './Card.module.css';
+import React from 'react'
+
+export const Card = (props:any) => {
+  return (
+    <section
+      className={`${classes.card} ${props.className ? props.className : ''}`}
+    >
+      {props.children}
+    </section>
+  );
+};
