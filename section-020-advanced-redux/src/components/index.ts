@@ -7,6 +7,7 @@ import {MainHeader} from "./Layout/MainHeader"
 import {ProductItem} from "./Shop/ProductItem"
 import {Products} from './Shop/Products'
 import {Card} from './UI/Card'
+import {Notification} from "./UI/Notification";
 
 
-export {App, Cart, CartButton, CartItem, ProductItem, Products, Card, Layout, MainHeader}
+export {App, Cart, CartButton, CartItem, ProductItem, Products, Card, Layout, MainHeader, Notification}
