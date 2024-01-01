@@ -1,6 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {uiSlice} from './uiSlice'
-import {cartSlice, ItemInterface, sendCartData} from "./cartSlice";
+import {cartSlice} from "./cartSlice";
+import {sendCartData} from "./cartActions/sendCartData";
+import {fetchCartData} from './cartActions/fetchCartData'
+
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +15,4 @@ export const store = configureStore({
 export const uiActions = uiSlice.actions
 export const cartActions = cartSlice.actions
 export type StateType = ReturnType<typeof store.getState>
-export type {ItemInterface}
-export {sendCartData}
+export {sendCartData, fetchCartData}

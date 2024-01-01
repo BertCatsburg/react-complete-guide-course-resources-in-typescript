@@ -2,7 +2,8 @@ import {Card, CartItem} from '../index';
 import classes from './Cart.module.css';
 import React from 'react'
 import {useSelector} from "react-redux";
-import {StateType, ItemInterface} from "../../store";
+import {StateType} from "../../store";
+import {ItemInterface} from '../../types'
 
 
 export const Cart = () => {

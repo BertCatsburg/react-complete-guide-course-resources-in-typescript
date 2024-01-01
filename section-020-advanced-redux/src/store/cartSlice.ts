@@ -1,22 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {uiActions} from "./index";
-import {dispatchType} from '../types'
-
-// The Item as stored in the Store
-export interface ItemInterface {
-  id: string
-  price: number
-  quantity: number
-  totalPrice: number
-  title: string
-}
-
-// The Cart as stored in the Store
-interface InitialStateInterface {
-  items: ItemInterface[],
-  totalQuantity: number,
-  totalAmount: number,
-}
+import {CartStateInterface} from '../types'
 
 // The Item for the AddItemToCart Action
 interface AddItemInterface {
@@ -25,14 +8,21 @@ interface AddItemInterface {
   price: number
 }
 
+
 export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [],
     totalQuantity: 0,
     totalAmount: 0,
-  } as InitialStateInterface,
+    changed: false
+  } as CartStateInterface,
   reducers: {
+
+    replaceCart: (state, action: PayloadAction<CartStateInterface>) => {
+      state.totalQuantity = action.payload.totalQuantity
+      state.items = action.payload.items
+    },
 
     addItemToCart: (state, action: PayloadAction<AddItemInterface>) => {
       const newItem: AddItemInterface = action.payload
@@ -44,6 +34,7 @@ export const cartSlice = createSlice({
           quantity: 1,
           totalPrice: newItem.price,
           title: newItem.title,
+
         })
       } else {
         existingItem.quantity++
@@ -51,6 +42,7 @@ export const cartSlice = createSlice({
       }
       state.totalAmount = state.totalAmount + newItem.price
       state.totalQuantity++
+      state.changed = true
     },
 
     removeItemFromCart: (state, action: PayloadAction<string>) => {
@@ -66,61 +58,8 @@ export const cartSlice = createSlice({
       }
       state.totalQuantity--
       state.totalAmount = state.totalAmount - existingItem.price
+      state.changed = true
     }
   }
 })
 
-
-// ********************************************************************************
-export const sendCartData = (cart: InitialStateInterface): dispatchType => {
-  return async (dispatch: any): Promise<void> => {
-
-    // Side effect in this Custom Reducer
-    dispatch(
-      uiActions.showNotification({
-        status: 'pending',
-        title: 'Sending...',
-        message: 'Sending Cart Data!'
-      })
-    )
-
-    const sendRequest = async (): Promise<void> => {
-      const response = await fetch('https://react-udemy-2023-bertc-default-rtdb.europe-west1.firebasedatabase.app/cart.json', {
-        method: 'PUT',
-        body: JSON.stringify(cart),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:3000/',
-          'Access-Control-Allow-Methods': 'POST, PUT, GET, OPTION',
-          'Access-Control-Allow-Headers': 'X-Requested-With,content-type'
-        }
-      })
-
-      if (!response.ok) {
-        throw new Error('Sending Cart data failed')
-      }
-    }
-
-    try {
-      await sendRequest()
-      dispatch(
-        uiActions.showNotification({
-          status: 'success',
-          title: 'Success!',
-          message: 'Sent cart data successfully!'
-        })
-      )
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(
-          uiActions.showNotification({
-            status: 'error',
-            title: 'Error!',
-            message: `Sent cart data failed!: ${error.message}`
-          })
-        )
-      }
-    }
-  }
-}

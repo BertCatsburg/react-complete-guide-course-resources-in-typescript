@@ -1,7 +1,7 @@
 import {Cart, Layout, Notification, Products} from '../index'
 import React, {Fragment, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {StateType, sendCartData} from "../../store";
+import {StateType, fetchCartData, sendCartData} from "../../store";
 import {dispatchType} from '../../types'
 
 let isInitial = true
@@ -14,13 +14,17 @@ export const App = () => {
   const notification = useSelector((state: StateType) => state.ui.notification)
 
   useEffect(() => {
+    dispatch(fetchCartData())
+  }, [])
+
+  useEffect(() => {
     if (isInitial) {
       isInitial = false
       return
     }
-
-    dispatch(sendCartData(cart))
-
+    if (cart.changed) {
+      dispatch(sendCartData(cart))
+    }
   }, [cart, dispatch])
 
   return (
