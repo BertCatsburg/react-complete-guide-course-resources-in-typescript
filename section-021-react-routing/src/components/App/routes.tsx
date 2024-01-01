@@ -1,11 +1,12 @@
 import {createBrowserRouter} from 'react-router-dom'
 import React from 'react'
-import {HomePage, ProductsPage, RootLayout} from '../../pages'
+import {HomePage, ProductsPage, RootLayout, ErrorPage, ProductDetailPage} from '../../pages'
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout/>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
@@ -13,7 +14,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/products',
-        element: <ProductsPage/>
+        element: <ProductsPage/>,
+      },
+      {
+        path: '/products/:productId',
+        element: <ProductDetailPage />,
       }
     ]
   },

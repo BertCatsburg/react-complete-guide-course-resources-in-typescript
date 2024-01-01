@@ -48,3 +48,17 @@ ul {
   margin: 0;
   padding: 0;
 }
+
+main {
+  margin: 2rem auto;
+  text-align: center;
+}
+
+button.navigateButton {
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #f6ad1b;
+  color: #000000;
+  font-weight: bold;
+}
+
