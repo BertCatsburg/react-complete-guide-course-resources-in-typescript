@@ -1,0 +1,11 @@
+ul.productsList li {
+    text-decoration: none;
+}
+ul.productsList li a {
+    color: #fcf3e1;
+    text-decoration: none;
+}
+ul.productsList li a:hover {
+    color: #f6ad1b;
+}
+
