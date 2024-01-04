@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import classes from './ProductDetail.module.css'
+import classes from './Products.module.css'
 
 const baseUrl = "/products/"
 const PRODUCTS = [
