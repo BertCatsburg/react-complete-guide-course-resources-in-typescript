@@ -1,12 +1,14 @@
-import classes from './EventsList.module.css';
+import classes from './EventsList.module.css'
 import React from 'react'
-import {EventInterface} from "../../types";
+import {EventInterface} from "../../types"
+import {useLoaderData} from "react-router"
 
 interface EventsListInterface {
   events: EventInterface[]
 }
 
 export const EventsList = ({events}: EventsListInterface) => {
+
   return (
     <div className={classes.events}>
 
