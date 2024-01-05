@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
         setTimeout(async () => {
           const events = await getAll();
           res.json({events: events});
-        }, 1500)
+        }, 500)
     } catch (error) {
         next(error);
     }
