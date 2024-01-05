@@ -1,6 +1,7 @@
 import {createBrowserRouter} from 'react-router-dom'
 import React from 'react'
 import {HomePage, EventsPage, NewEventPage, EventDetailPage, EditEventPage, RootLayout, EventsLayout} from '../../pages'
+import {RouteLoaderEvents} from './routeLoaderEvents'
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <EventsPage/>,
+            loader: RouteLoaderEvents
           },
           {
             path: ':eventid',
