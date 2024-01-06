@@ -1,11 +1,14 @@
 import React from 'react'
-import {useLoaderData} from 'react-router-dom'
+import {useRouteLoaderData} from 'react-router-dom'
 import {EventItem} from "../../components";
 import {EventInterface} from "../../types";
 
 export const EventDetailPage = () => {
 
-  const data: {event:EventInterface} = useLoaderData() as {event: EventInterface}
+  console.log('Starting EventDetailPage')
+
+  const data: {event:EventInterface} = useRouteLoaderData('eventLoader') as {event: EventInterface}
+  console.log('EventDetailPage: Data', data)
 
   return (
     <React.Fragment>

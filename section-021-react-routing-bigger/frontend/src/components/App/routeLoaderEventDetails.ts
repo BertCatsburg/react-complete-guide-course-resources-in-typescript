@@ -3,6 +3,8 @@ import {json, LoaderFunctionArgs} from 'react-router-dom'
 export const RouteLoaderEventDetails =
   async ({request, params}: LoaderFunctionArgs): Promise<any> => {
 
+    console.log('RouteLoaderEventDetails Executed')
+
     const eventid = params.eventid // eventid is specified in the routes
     const response = await fetch(`http://localhost:8080/events/${eventid}`)
 
@@ -12,6 +14,7 @@ export const RouteLoaderEventDetails =
         {message: `Cannot fetch Details for selected Event on ${request.url}`},
         {status: response.status, statusText: response.statusText})
     } else {
+      console.log('RouteLoaderEventDetails : Response is ok')
       return response
     }
   }
