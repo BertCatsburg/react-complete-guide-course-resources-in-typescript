@@ -15,9 +15,11 @@ export const ErrorPage = () => {
   let title = 'An error occurred'
   let message = 'Something went wrong!'
   let status: number = 500
+  let statusText: string = ''
 
   if (error.status && error.data) {
     status = error.status
+    statusText = error.statusText
     message = JSON.parse(error.data).message
   }
 
@@ -25,7 +27,7 @@ export const ErrorPage = () => {
     <React.Fragment>
       <MainNavigation/>
       <PageContent title={title}>
-        <p>{message} ({status})</p>
+        <p>{message} ({status}, {statusText})</p>
 
       </PageContent>
     </React.Fragment>

@@ -4,13 +4,14 @@ export interface EventResponse extends Response {
   events: EventInterface[]
 }
 
-export const RouteLoaderEvents = async (): Promise<EventResponse> => {
-  const response: EventResponse = await fetch('http://localhost:8080/events') as EventResponse
+export const RouteLoaderEvents = async (): Promise<any> => {
+  const response: EventResponse = await fetch('http://localhost:8080/eventssss') as EventResponse
 
+  console.log(response)
   if (!response.ok) {
     throw new Response(
       JSON.stringify({message: 'Cannot fetch Events'}),
-      {status: 500})
+      {status: response.status, statusText: response.statusText})
   } else {
     return response
   }
