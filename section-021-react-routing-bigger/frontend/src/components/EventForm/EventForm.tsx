@@ -5,11 +5,11 @@ import classes from './EventForm.module.css';
 import {EventInterface} from "../../types";
 
 interface EventFormInterface {
-  method: any
-  event: EventInterface
+  method?: any | undefined
+  event? : EventInterface | undefined
 }
 
-export const EventForm = ({event}: EventFormInterface) => {
+export const EventForm = ({event}: EventFormInterface ) => {
   const navigate = useNavigate();
 
   function cancelHandler() {
