@@ -1,13 +1,17 @@
 import {EventInterface} from "../../types";
 
-export const RouteLoaderEvents = async (): Promise<EventInterface[]> => {
-  const response = await fetch('http://localhost:8080/events');
+export interface EventResponse extends Response {
+  events: EventInterface[]
+}
+
+export const RouteLoaderEvents = async (): Promise<EventResponse> => {
+  const response: EventResponse = await fetch('http://localhost:8080/events') as EventResponse
 
   if (!response.ok) {
-    // Handle invalid response
-    return []
+    throw new Response(
+      JSON.stringify({message: 'Cannot fetch Events'}),
+      {status: 500})
   } else {
-    const resData = await response.json()
-    return resData.events as EventInterface[]
+    return response
   }
 }

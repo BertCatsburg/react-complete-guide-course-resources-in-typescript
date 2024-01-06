@@ -5,5 +5,6 @@ import {EventsPage} from './EventsPage/EventsPage';
 import {NewEventPage} from './NewEventPage/NewEventPage';
 import {RootLayout} from "./Layouts/RootLayout";
 import {EventsLayout} from "./Layouts/EventsLayout";
+import {ErrorPage} from "./ErrorPage/ErrorPage";
 
-export {HomePage, EditEventPage, EventDetailPage, NewEventPage, EventsPage, RootLayout, EventsLayout}
+export {HomePage, EditEventPage, EventDetailPage, NewEventPage, EventsPage, RootLayout, EventsLayout, ErrorPage}

@@ -4,5 +4,6 @@ import {EventItem} from './EventItem/EventItem'
 import {EventsList} from './EventsList/EventsList'
 import {EventsNavigation} from './EventsNavigation/EventsNavigation'
 import {MainNavigation} from './MainNavigation/MainNavigation'
+import {PageContent} from "./PageContent/PageContent"
 
-export {App, EventForm, EventsList, EventItem, EventsNavigation, MainNavigation}
+export {App, EventForm, EventsList, EventItem, EventsNavigation, MainNavigation, PageContent}
