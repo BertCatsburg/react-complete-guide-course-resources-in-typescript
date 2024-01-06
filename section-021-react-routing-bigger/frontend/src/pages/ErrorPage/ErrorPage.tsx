@@ -6,7 +6,9 @@ interface ErrorInterface {
   status: number
   statusText: string
   internal: boolean
-  data: string
+  data: {
+    message:string
+  }
 }
 
 export const ErrorPage = () => {
@@ -17,10 +19,12 @@ export const ErrorPage = () => {
   let status: number = 500
   let statusText: string = ''
 
+  console.log(error)
+
   if (error.status && error.data) {
     status = error.status
     statusText = error.statusText
-    message = JSON.parse(error.data).message
+    message = error.data.message
   }
 
   return (

@@ -11,6 +11,7 @@ import {
   ErrorPage
 } from '../../pages'
 import {RouteLoaderEvents} from './routeLoaderEvents'
+import {RouteLoaderEventDetails} from "./routeLoaderEventDetails";
 
 export const router = createBrowserRouter([
   {
@@ -34,13 +35,14 @@ export const router = createBrowserRouter([
           {
             path: ':eventid',
             element: <EventDetailPage/>,
+            loader: RouteLoaderEventDetails
           },
           {
             path: 'new',
             element: <NewEventPage/>,
           },
           {
-            path: ':id/edit',
+            path: ':eventid/edit',
             element: <EditEventPage/>,
           },
         ]
