@@ -12,6 +12,8 @@ import {
 } from '../../pages'
 import {RouteLoaderEvents} from './routeLoaderEvents'
 import {RouteLoaderEventDetails} from "./routeLoaderEventDetails";
+import {RouteActionNewEvent} from "./routeActionNewEvent";
+import {RouteActionDeleteEvent} from "./routeActionDeleteEvent";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +42,7 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 element: <EventDetailPage/>,
+                action: RouteActionDeleteEvent,
               },
               {
                 path: 'edit',
@@ -50,6 +53,7 @@ export const router = createBrowserRouter([
           {
             path: 'new',
             element: <NewEventPage/>,
+            action: RouteActionNewEvent
           },
 
         ]
