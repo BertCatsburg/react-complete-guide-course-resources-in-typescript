@@ -1,6 +1,6 @@
 import {ResultModalDialog} from "./css/ResultModalDialog.tsx";
-import {forwardRef, ForwardedRef, useImperativeHandle, useState} from "react";
-import
+import React, {forwardRef, ForwardedRef, useImperativeHandle, useState} from "react";
+
 
 interface ResultModalPropsInterface {
   result: string;
