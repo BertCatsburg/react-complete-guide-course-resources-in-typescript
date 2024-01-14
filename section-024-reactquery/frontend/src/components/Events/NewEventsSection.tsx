@@ -10,7 +10,9 @@ export const  NewEventsSection = () => {
 
   const {data, isPending, isError, error} = useQuery({
     queryKey: ['events'],
-    queryFn: fetchEvents // A function that returns a Promise
+    queryFn: fetchEvents, // A function that returns a Promise
+    staleTime: 0, // Immediately send the request in the background to check if cache it up-to-date
+    gcTime: 60000, // Default is 5 minutes (300000)
   })
   let content;
 
