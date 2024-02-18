@@ -10,9 +10,10 @@ export const  NewEventsSection = () => {
 
   const {data, isPending, isError, error} = useQuery({
     queryKey: ['events'],
+    // queryFn: ({signal}: QueryFunctionContext) => fetchEvents({signal: signal}), // A function that returns a Promise
     queryFn: fetchEvents, // A function that returns a Promise
     staleTime: 0, // Immediately send the request in the background to check if cache it up-to-date
-    gcTime: 60000, // Default is 5 minutes (300000)
+    gcTime: 60000, // Default is 5 minutes (300000), 60000 = 1 minute.
   })
   let content;
 
@@ -21,6 +22,7 @@ export const  NewEventsSection = () => {
   }
 
   if (isError) {
+    console.log(error)
     content = (
       <ErrorBlock title="An error occurred" error={error} />
     );
