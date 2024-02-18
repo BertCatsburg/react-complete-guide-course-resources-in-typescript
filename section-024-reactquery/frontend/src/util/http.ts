@@ -71,7 +71,7 @@ export const createNewEvent = async (eventData: any) => {
  * Fetch Selectable Images
  * @param signal
  */
-export async function fetchSelectableImages({ signal }: Partial<Request>) {
+export async function fetchSelectableImages({ signal }: {signal: AbortSignal}) {
   const response = await fetch(`http://localhost:3000/events/images`, { signal });
 
   if (!response.ok) {
@@ -86,4 +86,45 @@ export async function fetchSelectableImages({ signal }: Partial<Request>) {
   console.log('[Util/Http/FetchSelectableImages] - Fetched images:')
   console.log(images)
   return images;
+}
+
+
+/**
+ * Fetch 1 Event
+ * @param id
+ * @param signal
+ */
+export async function fetchEvent({ id, signal }: {id: string, signal: AbortSignal}) {
+  const response = await fetch(`http://localhost:3000/events/${id}`, { signal });
+
+  if (!response.ok) {
+    const error: MyError = new Error('An error occurred while fetching the event');
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const { event } = await response.json();
+
+  return event;
+}
+
+
+/**
+ * Delete an Event
+ * @param id
+ */
+export async function deleteEvent({ id }: {id: string}) {
+  const response = await fetch(`http://localhost:3000/events/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error:MyError = new Error('An error occurred while deleting the event');
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  return response.json();
 }
