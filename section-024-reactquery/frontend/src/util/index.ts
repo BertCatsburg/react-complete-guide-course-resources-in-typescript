@@ -1,4 +1,10 @@
-import {fetchEvents, fetchEventsInterface} from './http'
+import {
+  fetchEvents,
+  fetchEventsInterface,
+  createNewEvent,
+  fetchSelectableImages,
+  queryClient,
+} from './http'
 
-export {fetchEvents}
+export {fetchEvents, createNewEvent, fetchSelectableImages, queryClient}
 export type {fetchEventsInterface}

@@ -1,30 +1,48 @@
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import React from 'react'
+import {useMutation} from '@tanstack/react-query'
 
-import {Modal} from '../UI';
+import {ErrorBlock, Modal} from '../UI';
 import {EventForm} from './index'
-import {ImageInterface} from "../types";
+import {createNewEvent, queryClient} from "../../util";
 
-export const  NewEvent = () => {
+
+export const NewEvent = () => {
   const navigate = useNavigate();
 
-  function handleSubmit({image, ...data}: {image: ImageInterface}) {
-    console.log(image)
-    console.log(data)
+  const {
+    mutate,
+    isPending,
+    isError,
+    error
+  } = useMutation({
+    mutationFn: createNewEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['events']})
+      navigate('/events')
+    }
+  })
+
+  function handleSubmit(formData: FormData) {
+    mutate({event: formData})
   }
 
   return (
     <Modal onClose={() => navigate('../')}>
       <EventForm onSubmit={handleSubmit}>
-        <>
-          <Link to="../" className="button-text">
-            Cancel
-          </Link>
-          <button type="submit" className="button">
-            Create
-          </button>
-        </>
+        {isPending && 'Submitting...'}
+        {!isPending &&
+            <>
+                <Link to="../" className="button-text">
+                    Cancel
+                </Link>
+                <button type="submit" className="button">
+                    Create
+                </button>
+            </>
+        }
       </EventForm>
+      {isError && <ErrorBlock title="An error has occurred" message={error.message || 'Failed to create Event'}/>}
     </Modal>
   );
 }

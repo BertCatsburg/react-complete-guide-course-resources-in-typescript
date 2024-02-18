@@ -9,9 +9,6 @@ interface ImagePickerInterface {
 }
 
 export const ImagePicker = ({images, selectedImage, onSelect}: ImagePickerInterface) => {
-  if (!selectedImage) {
-    return null
-  }
 
   return (
     <div id="image-picker">

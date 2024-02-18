@@ -1,43 +1,34 @@
-import React, {useState, ReactNode, FormEvent} from 'react'
+import {useState} from 'react';
+import React from 'react'
+import {useQuery} from '@tanstack/react-query'
+import {fetchSelectableImages} from '../../util'
 
-import {ImagePicker} from '../UI'
-import {ImageInterface} from "../types";
-
-interface InputDataInterface {
-  image: ImageInterface
-  title: string
-  description: string
-  time: string
-  location: string
-  date: string
-}
+import {ErrorBlock, ImagePicker} from '../UI';
 
 interface EventFormInterface {
-  inputData?: InputDataInterface | null
-  onSubmit: ({image, ...data}: { image: ImageInterface; }) => void
-  children?: ReactNode
-
+  inputData?: any | undefined
+  onSubmit: any
+  children: React.ReactNode
 }
 
 export const EventForm = ({inputData, onSubmit, children}: EventFormInterface) => {
-  const [selectedImage, setSelectedImage] = useState(inputData?.image.path);
+  const [selectedImage, setSelectedImage] = useState(inputData?.image);
+  const {data, isPending, isError, error} = useQuery({
+    queryKey: ['events-images'],
+    queryFn: fetchSelectableImages,
+  })
 
-  const handleSelectImage = (imagePath: string) => {
-    setSelectedImage(imagePath);
+  function handleSelectImage(image: any) {
+    setSelectedImage(image);
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  function handleSubmit(event: any) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    console.log(formData)
+    const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    const newImage = {
-      path: 'sdf',
-      caption: 'slfsdlkfjsd'
-    }
-    onSubmit({...data, image: newImage}); //
+    onSubmit({...data, image: selectedImage});
   }
 
   return (
@@ -52,13 +43,16 @@ export const EventForm = ({inputData, onSubmit, children}: EventFormInterface) =
         />
       </p>
 
-      <div className="control">
+      {isPending && <p>Loading selectable Images</p>}
+      {isError && <ErrorBlock title="Error Loading Images" message={error.message} />}
+      {data && (<div className="control">
         <ImagePicker
-          images={[]}
+          images={data}
           onSelect={handleSelectImage}
           selectedImage={selectedImage}
         />
-      </div>
+      </div>)
+      }
 
       <p className="control">
         <label htmlFor="description">Description</label>

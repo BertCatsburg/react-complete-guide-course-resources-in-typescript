@@ -4,7 +4,8 @@ import {
   createBrowserRouter,
 } from 'react-router-dom'
 import React from 'react'
-import {QueryClientProvider, QueryClient} from '@tanstack/react-query'
+import {QueryClientProvider} from '@tanstack/react-query'
+import { queryClient} from '../../util'
 import {Events, EventDetails, NewEvent, EditEvent} from '../Events'
 
 const router = createBrowserRouter([
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient()
+// const queryClient = new QueryClient()
 
 export const App = () => {
   return (
