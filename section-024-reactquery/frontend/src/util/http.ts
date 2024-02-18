@@ -14,7 +14,7 @@ export const fetchEvents = async ({signal, searchTerm}: fetchEventsInterface) =>
     url += '?search=' + searchTerm
   }
 
-  let options : Partial<Request>  = {
+  const options : Partial<Request>  = {
     method: 'GET',
     signal: signal || undefined
   }

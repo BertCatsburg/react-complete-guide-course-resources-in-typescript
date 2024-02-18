@@ -12,21 +12,21 @@ export const FindEventSection = () => {
   // and we want a rerender because we use the searchTerm in the useQuery queryKey
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined)
 
-  const {data, isPending, isError, error} = useQuery({
+  const {data, isLoading, isError, error} = useQuery({
     queryKey: ['events', {search: searchTerm}], // Each searchTerm having its own queryKey
-    queryFn: ({signal}: QueryFunctionContext) => fetchEvents({signal, searchTerm: searchTerm})
+    queryFn: ({signal}: QueryFunctionContext) => fetchEvents({signal, searchTerm: searchTerm}),
+    enabled: searchTerm !== undefined // 'undefined' is the initial value. After that, you see all Events
   })
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(`[FindEventSection/handleSubmit] - searchTerm = ${searchElement && searchElement.current ? searchElement.current.value : 'Unknown'}`)
+    // console.log(`[FindEventSection/handleSubmit] - searchTerm = ${searchElement && searchElement.current ? searchElement.current.value : 'Unknown'}`)
     setSearchTerm(searchElement && searchElement.current ? searchElement.current.value : undefined)
-    console.log(e.currentTarget.value)
   }
 
   let content = <p>Please enter a search term to find events.</p>
 
-  if (isPending) {
+  if (isLoading) {
     content = <LoadingIndicator/>
   }
 
