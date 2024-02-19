@@ -6,9 +6,9 @@ import {EventItem} from './index'
 import {fetchEvents} from "../../util";
 import {EventInterface} from "../types";
 
-export const  NewEventsSection = () => {
+export const NewEventsSection = () => {
 
-  const {data, isPending, isError, error} = useQuery({
+  const {data, isPending, isError, error, isSuccess} = useQuery({
     queryKey: ['events'],
     // queryFn: ({signal}: QueryFunctionContext) => fetchEvents({signal: signal}), // A function that returns a Promise
     queryFn: fetchEvents, // A function that returns a Promise
@@ -18,24 +18,30 @@ export const  NewEventsSection = () => {
   let content;
 
   if (isPending) {
-    content = <LoadingIndicator />;
+    content = <LoadingIndicator/>;
   }
 
   if (isError) {
     console.log(error)
     content = (
-      <ErrorBlock title="An error occurred" error={error} />
+      <ErrorBlock title="An error occurred" error={error}/>
     );
   }
 
-  if (data) {
+  if (isSuccess && data) {
+    console.log(data)
     content = (
       <ul className="events-list">
-        {data.map((event: EventInterface) => (
-          <li key={event.id}>
-            <EventItem event={event} />
-          </li>
-        ))}
+        {
+          data.map((event: EventInterface) => {
+              return (
+                <li key={event.id}>
+                  <EventItem event={event}/>
+                </li>
+              )
+            }
+          )
+        }
       </ul>
     );
   }

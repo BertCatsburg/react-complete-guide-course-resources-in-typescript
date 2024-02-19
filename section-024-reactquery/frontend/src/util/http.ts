@@ -83,8 +83,8 @@ export async function fetchSelectableImages({ signal }: {signal: AbortSignal}) {
 
   const { images } = await response.json();
 
-  console.log('[Util/Http/FetchSelectableImages] - Fetched images:')
-  console.log(images)
+  // console.log('[Util/Http/FetchSelectableImages] - Fetched images:')
+  // console.log(images)
   return images;
 }
 

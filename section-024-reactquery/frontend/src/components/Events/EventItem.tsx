@@ -6,12 +6,20 @@ interface EventItemInterfave {
   event: EventInterface
 }
 
+/**
+ * Event Item - Show an Event Item on the overview page, with a link to the details page.
+ *
+ * @param event
+ * @constructor
+ */
 export const  EventItem = ({ event }: EventItemInterfave) => {
   const formattedDate = new Date(event.date).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   });
+
+  // console.log(`[EventItem] - Event Id = ${event.id}`)
   return (
     <article className="event-item">
       <img src={`http://localhost:3000/${event.image}`} alt={event.title} />

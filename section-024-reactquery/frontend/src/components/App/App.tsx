@@ -1,47 +1,29 @@
 import {
   Navigate,
-  RouterProvider,
-  createBrowserRouter,
+  Routes,
+  Route,
+  BrowserRouter,
 } from 'react-router-dom'
 import React from 'react'
 import {QueryClientProvider} from '@tanstack/react-query'
 import { queryClient} from '../../util'
 import {Events, EventDetails, NewEvent, EditEvent} from '../Events'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Navigate to="/events"/>,
-  },
-  {
-    path: '/events',
-    element: <Events/>,
-
-    children: [
-      {
-        path: '/events/new',
-        element: <NewEvent/>,
-      },
-    ],
-  },
-  {
-    path: '/events/:id',
-    element: <EventDetails/>,
-    children: [
-      {
-        path: '/events/:id/edit',
-        element: <EditEvent/>,
-      },
-    ],
-  },
-]);
-
-// const queryClient = new QueryClient()
-
 export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router}/>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Navigate replace to="events"/>} />
+          <Route path="events" element={<Events />}>
+            <Route path="new" element={<NewEvent />} />
+          </Route>
+          <Route path="events/:id" element={<EventDetails />}>
+            <Route path="edit" element={<EditEvent />} />
+          </Route>
+
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }
