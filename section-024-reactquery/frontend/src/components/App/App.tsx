@@ -21,7 +21,6 @@ export const App = () => {
           <Route path="events/:id" element={<EventDetails />}>
             <Route path="edit" element={<EditEvent />} />
           </Route>
-
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
