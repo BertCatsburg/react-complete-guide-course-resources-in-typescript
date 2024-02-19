@@ -7,18 +7,24 @@ export const queryClient = new QueryClient();
 // Extend with optional Interface QueryFunctionContext
 export interface fetchEventsInterface extends Partial<QueryFunctionContext> {
   searchTerm?: string | undefined;
+  max?: number | undefined
 }
 
 /**
  * Fetch Events
  * @param signal
  * @param searchTerm
+ * @param max
  */
-export const fetchEvents = async ({signal, searchTerm}: fetchEventsInterface) => {
+export const fetchEvents = async ({signal, searchTerm, max}: fetchEventsInterface) => {
   // console.log(`[util/http] - Search Term = ${JSON.stringify(searchTerm)}`)
   let url = 'http://localhost:3000/events';
-  if (searchTerm) {
+  if (searchTerm && max) {
+    url += '?search=' + searchTerm + '&max=' + max
+  } else if (searchTerm) {
     url += '?search=' + searchTerm
+  } else if (max) {
+    url += '?max=' + max
   }
 
   const options : Partial<Request>  = {

@@ -1,5 +1,5 @@
 import React from 'react'
-import {useQuery} from '@tanstack/react-query'
+import {useQuery, QueryFunctionContext} from '@tanstack/react-query'
 
 import {ErrorBlock, LoadingIndicator} from '../UI'
 import {EventItem} from './index'
@@ -9,12 +9,17 @@ import {EventInterface} from "../types";
 export const NewEventsSection = () => {
 
   const {data, isPending, isError, error, isSuccess} = useQuery({
-    queryKey: ['events'],
-    // queryFn: ({signal}: QueryFunctionContext) => fetchEvents({signal: signal}), // A function that returns a Promise
-    queryFn: fetchEvents, // A function that returns a Promise
-    staleTime: 0, // Immediately send the request in the background to check if cache it up-to-date
-    gcTime: 60000, // Default is 5 minutes (300000), 60000 = 1 minute.
+    queryKey: ['events', {max: 3}], // Dedicated Query Key for 'max = 3' query.
+
+    // QueryKey is passed into queryFn
+    queryFn: ({signal, queryKey}: Partial<QueryFunctionContext>) => {
+      console.log(queryKey)
+      return fetchEvents({signal: signal, max: 3}) // queryKey should be here, but does not work
+    },
+    // queryFn: ({signal, queryKey}: {signal: AbortSignal}) => fetchEvents({signal, max: 3}),
+    staleTime: 5000,
   })
+
   let content;
 
   if (isPending) {
