@@ -6,6 +6,7 @@ import {
   queryClient,
   deleteEvent,
   fetchEvent,
+  updateEvent,
 } from './http'
 
 export {
@@ -14,6 +15,7 @@ export {
   fetchSelectableImages,
   queryClient,
   deleteEvent,
-  fetchEvent
+  fetchEvent,
+  updateEvent,
 }
 export type {fetchEventsInterface}

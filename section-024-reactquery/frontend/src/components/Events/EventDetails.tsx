@@ -1,4 +1,4 @@
-import {Link, useParams, useNavigate} from 'react-router-dom';
+import {Link, useParams, useNavigate, Outlet} from 'react-router-dom';
 import React, {useState} from 'react'
 import {QueryFunctionContext, useQuery, useMutation} from "@tanstack/react-query";
 import {fetchEvent, deleteEvent, queryClient} from '../../util'
@@ -130,7 +130,7 @@ export const EventDetails = () => {
           </Modal>
         )
       }
-
+      <Outlet />
       <Header>
         <Link to="/events" className="nav-item">
           View all Events

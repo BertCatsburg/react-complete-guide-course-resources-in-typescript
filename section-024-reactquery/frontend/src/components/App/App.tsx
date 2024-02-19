@@ -15,10 +15,10 @@ export const App = () => {
       <BrowserRouter>
         <Routes>
           <Route index element={<Navigate replace to="events"/>} />
-          <Route path="events" element={<Events />}>
+          <Route path="events/*" element={<Events />}>
             <Route path="new" element={<NewEvent />} />
           </Route>
-          <Route path="events/:id" element={<EventDetails />}>
+          <Route path="events/:id/*" element={<EventDetails />}>
             <Route path="edit" element={<EditEvent />} />
           </Route>
         </Routes>

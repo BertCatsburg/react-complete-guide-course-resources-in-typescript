@@ -142,10 +142,14 @@ app.put('/events/:id', async (req, res) => {
         return res.status(404).json({message: 'Event not found'});
     }
 
+    const newTitle = event.title + '*'
     events[eventIndex] = {
         id,
         ...event,
+        title: newTitle
     };
+    // console.log(events[eventIndex])
+    // console.log(`[PUT] - Event Title = ${newTitle}`)
 
     await fs.writeFile('./data/events.json', JSON.stringify(events));
 
