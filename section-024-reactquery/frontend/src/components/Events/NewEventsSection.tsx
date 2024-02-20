@@ -6,6 +6,7 @@ import {EventItem} from './index'
 import {fetchEvents} from "../../util";
 import {EventInterface} from "../types";
 
+// https://stackoverflow.com/questions/78023580/cannot-translate-javascript-to-typescript-with-spread-operator-object
 interface ParamInterface {
   max: number
 }
