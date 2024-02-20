@@ -1,6 +1,5 @@
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
 import React from 'react'
-
 import {WelcomePage, ChallengesPage} from '../../pages'
 
 const router = createBrowserRouter([
