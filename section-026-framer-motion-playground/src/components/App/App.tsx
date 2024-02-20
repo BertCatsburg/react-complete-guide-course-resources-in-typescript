@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import React from 'react'
+import {motion} from "framer-motion";
 
 export const  App = () => {
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [rotate, setRotate] = useState(0);
 
-  console.log(x)
-  console.log(y)
-  console.log(rotate)
-
   return (
     <div id="demo">
-      <div id="box" />
+      <motion.div
+        id="box"
+        animate={{ x: x, y: y, rotate: rotate}}
+        transition={{
+          duration: 0.3,
+          type: "spring",
+          bounce: 0.5
+      }}
+
+      />
 
       <div id="inputs">
         <p>
