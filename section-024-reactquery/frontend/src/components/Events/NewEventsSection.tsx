@@ -1,10 +1,19 @@
 import React from 'react'
-import {useQuery, QueryFunctionContext} from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 
 import {ErrorBlock, LoadingIndicator} from '../UI'
 import {EventItem} from './index'
 import {fetchEvents} from "../../util";
 import {EventInterface} from "../types";
+
+interface ParamInterface {
+  max: number
+}
+
+type QueryKeyType = [
+  string,
+  ParamInterface
+]
 
 export const NewEventsSection = () => {
 
@@ -12,11 +21,9 @@ export const NewEventsSection = () => {
     queryKey: ['events', {max: 3}], // Dedicated Query Key for 'max = 3' query.
 
     // QueryKey is passed into queryFn
-    queryFn: ({signal, queryKey}: Partial<QueryFunctionContext>) => {
-      console.log(queryKey)
-      return fetchEvents({signal: signal, max: 3}) // queryKey should be here, but does not work
+    queryFn: ({signal, queryKey}: {signal: AbortSignal, queryKey: QueryKeyType}) => {
+      return fetchEvents({signal: signal, ...queryKey[1]})
     },
-    // queryFn: ({signal, queryKey}: {signal: AbortSignal}) => fetchEvents({signal, max: 3}),
     staleTime: 5000,
   })
 
