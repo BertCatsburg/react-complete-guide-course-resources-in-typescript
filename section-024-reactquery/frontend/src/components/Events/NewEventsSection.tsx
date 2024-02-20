@@ -19,7 +19,7 @@ type QueryKeyType = [
 export const NewEventsSection = () => {
 
   const {data, isPending, isError, error, isSuccess} = useQuery({
-    queryKey: ['events', {max: 3}], // Dedicated Query Key for 'max = 3' query.
+    queryKey: ['events', {max: 30}], // Dedicated Query Key for 'max = 3' query.
 
     // QueryKey is passed into queryFn
     queryFn: ({signal, queryKey}: {signal: AbortSignal, queryKey: QueryKeyType}) => {

@@ -7,7 +7,13 @@ import {
 import React from 'react'
 import {QueryClientProvider} from '@tanstack/react-query'
 import { queryClient} from '../../util'
-import {Events, EventDetails, NewEvent, EditEvent} from '../Events'
+import {
+  Events,
+  EventDetails,
+  NewEvent,
+  EditEvent,
+  loaderForEditEvent,
+} from '../Events'
 
 export const App = () => {
   return (
@@ -19,7 +25,7 @@ export const App = () => {
             <Route path="new" element={<NewEvent />} />
           </Route>
           <Route path="events/:id/*" element={<EventDetails />}>
-            <Route path="edit" element={<EditEvent />} />
+            <Route path="edit" element={<EditEvent />} loader={loaderForEditEvent} />
           </Route>
         </Routes>
       </BrowserRouter>

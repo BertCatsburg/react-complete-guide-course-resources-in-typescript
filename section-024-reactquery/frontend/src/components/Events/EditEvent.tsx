@@ -1,8 +1,7 @@
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, LoaderFunctionArgs, useNavigate, useParams} from 'react-router-dom';
 import {ErrorBlock, LoadingIndicator, Modal} from '../UI';
 import {EventForm} from './index'
 import React from 'react'
-// import {ImageInterface} from "../types";
 import {QueryFunctionContext, useQuery, useMutation} from '@tanstack/react-query'
 import {
   fetchEvent,
@@ -127,3 +126,20 @@ export const EditEvent = () => {
     </Modal>
   );
 }
+
+// Use React Router to load the data
+export function loader(params: LoaderFunctionArgs): Promise<any> {
+
+  console.log('[EditEvent/loader] - params', params)
+  const {id} = useParams()
+
+  if (!id) {
+    return Promise.reject('No ID Passed')
+  }
+
+  return queryClient.fetchQuery({
+    queryKey: ['events', {id: id}],
+    queryFn: ({signal}: QueryFunctionContext) => fetchEvent({id, signal}),
+  })
+}
+
