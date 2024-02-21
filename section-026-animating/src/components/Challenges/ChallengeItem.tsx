@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
+import {motion} from "framer-motion";
 
-import { ChallengesContext } from '../../store/challenges-context'
+import {ChallengesContext} from '../../store/challenges-context'
 import {ChallengeInterface} from "../../types";
 
 interface ChallengeItemInterface {
@@ -8,12 +9,13 @@ interface ChallengeItemInterface {
   onViewDetails: any
   isExpanded: boolean
 }
+
 export const ChallengeItem = ({
-  challenge,
-  onViewDetails,
-  isExpanded,
-}: ChallengeItemInterface) => {
-  const { updateChallengeStatus } = useContext(ChallengesContext);
+                                challenge,
+                                onViewDetails,
+                                isExpanded,
+                              }: ChallengeItemInterface) => {
+  const {updateChallengeStatus} = useContext(ChallengesContext);
 
   const formattedDate = new Date(challenge.deadline).toLocaleDateString(
     'en-US',
@@ -36,7 +38,7 @@ export const ChallengeItem = ({
     <li>
       <article className="challenge-item">
         <header>
-          <img {...challenge.image} alt="" />
+          <img {...challenge.image} alt=""/>
           <div className="challenge-item-meta">
             <h2>{challenge.title}</h2>
             <p>Complete until {formattedDate}</p>
@@ -48,11 +50,16 @@ export const ChallengeItem = ({
             </p>
           </div>
         </header>
-        <div className={`challenge-item-details ${isExpanded ? 'expanded' : ''}`}>
+        <div className="challenge-item-details">
           <p>
             <button onClick={onViewDetails}>
               View Details{' '}
-              <span className="challenge-item-details-icon">&#9650;</span>
+              <motion.span
+                className="challenge-item-details-icon"
+                animate={{rotate: isExpanded ? 180 : 0}}
+              >
+                &#9650;
+              </motion.span>
             </button>
           </p>
 
